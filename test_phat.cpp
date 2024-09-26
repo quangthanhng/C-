@@ -1,27 +1,24 @@
 #include <iostream>
-#include<string>
+#include <string>
 using namespace std;
 
-string fix(string fullname){
-    fullname[0] = toupper(fullname[0]);
-    for (int i = 1; i < fullname.length(); i++)
-    {
-        fullname[i] = tolower(fullname[i]);
-        if (fullname[i - 1] == ' ')
-        { // nguyen anh vu
-            fullname[i] = toupper(fullname[i]);
-        }
-    }
-    return fullname;
-}
-
-int main() {
+class Employee {
+    public:
     string name;
-    cout << "Nhập tên: ";
-    getline(cin, name); // Đọc cả dòng nhập vào từ người dùng
+    void set_salary(const double potential_salary){
+        salary = potential_salary;
+    }
+    double get_salary(){
+        return salary;
+    }
+    private:
+    double salary;
+};
 
-    string newname = fix(name);
-    cout << "Tên đã sửa lại là: " << newname << endl;
-
-    return 0;
+int main(){
+    Employee nv1;
+    nv1.name = "Kevin";
+    cout << nv1.name << endl;
+    nv1.set_salary(50000);
+    cout << nv1.get_salary() << endl;
 }

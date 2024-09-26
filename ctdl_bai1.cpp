@@ -1,6 +1,7 @@
 #include <iostream>
 
 using namespace std;
+//6 29 -91 47 88 44 5
 
 struct Node
 {
@@ -41,18 +42,18 @@ int main()
     Node *head = nullptr;
     int index;
     cin >> index;
-    if(index == 0){
-        cout << "Danh sach rong";
-    } else {
-    for (int i = 0; i < 1;)
+    if (index == 0)
     {
-        add(head, index);
-        cin >> index;
-        if(index == 0){
-            i++;
-        }
+        cout << "Danh sach rong.";
     }
-    cout << "Danh sach vua nhap la: ";
-    print_Node(head);
+    else
+    {
+        while (index != 0)
+        {
+            add(head, index);
+            cin >> index;
+        }
+        cout << "Danh sach vua nhap la: "; 
+        print_Node(head);
     }
 }

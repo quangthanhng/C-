@@ -19,7 +19,7 @@ void CreateList(List &l)
     l.pTail = NULL;
 }
 
-// Hàm xóa tất cả phần tử có giá trị value
+// Hàm xóa phần tử đầu tiên có giá trị value
 void frequency(List *list, int value)
 {
     if (list->pHead == NULL)
@@ -28,43 +28,30 @@ void frequency(List *list, int value)
         return;
     }
 
-    bool found = false;
-
-    // Xóa tất cả phần tử đầu có giá trị bằng value
-    while (list->pHead != NULL && list->pHead->info == value)
+    // Xóa phần tử đầu tiên nếu giá trị bằng value
+    if (list->pHead->info == value)
     {
         node *temp = list->pHead;
         list->pHead = list->pHead->pNext;
         delete temp;
-        found = true;
+
+        if (list->pHead == NULL)
+            cout << "Danh sach rong." << endl;
+        return;
     }
 
-    // Duyệt và xóa các phần tử có giá trị value trong danh sách
-    node *p = list->pHead;
-    while (p != NULL && p->pNext != NULL)
+    // Tìm và xóa phần tử có giá trị value
+    bool found = false;
+    for (node *p = list->pHead; p->pNext != NULL; p = p->pNext)
     {
         if (p->pNext->info == value)
         {
-            node *temp = p->pNext;
+            node *key = p->pNext;
             p->pNext = p->pNext->pNext;
-            delete temp;
+            delete key;
             found = true;
+            break;
         }
-        else
-        {
-            p = p->pNext;
-        }
-    }
-
-    // Cập nhật con trỏ pTail nếu danh sách rỗng hoặc xóa phần tử cuối cùng
-    if (list->pHead == NULL)
-    {
-        list->pTail = NULL;
-        cout << "Danh sach rong." << endl;
-    }
-    else if (list->pTail->info == value)
-    {
-        list->pTail = p; // Cập nhật lại tail nếu phần tử cuối cùng bị xóa
     }
 
     if (!found)
@@ -73,6 +60,7 @@ void frequency(List *list, int value)
     }
 }
 
+// Hàm đảo ngược danh sách liên kết
 void ReverseList(List &l)
 {
     node *prev = NULL;
@@ -106,7 +94,6 @@ void insert(List *list, int value)
         list->pTail = p;
     }
 }
-// 85 36 85 35 20 20 61 36 76 15 20 16 36 5 0 36
 
 // Hàm nhập dữ liệu đầu vào
 void nhap(List &l, int &index)
@@ -145,13 +132,15 @@ int main()
     }
     else
     {
-        frequency(&l, value); // Xóa tất cả các phần tử có giá trị value
+        ReverseList(l); // Đảo ngược danh sách sau khi xóa
+        frequency(&l, value);
         if (l.pHead != NULL)
         {
-            ReverseList(l);
-            xuat(l); // Xuất danh sách nếu không rỗng sau khi xóa
+            xuat(l);
         }
     }
-
+//85 36 85 35 20 20 61 36 76 15 20 16 36 5 0 17
+//85 36 85 35 20 20 61 36 76 15 20 16 36 5 0 36
+//5 16 20 15 76 36 61 20 20 35 85 36 85
     return 0;
 }

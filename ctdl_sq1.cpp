@@ -2,82 +2,89 @@
 using namespace std;
 
 struct Node {
+public:
     int data;
-    Node* next;
+    Node *next;
+    Node(int value) {
+        data = value;
+        next = NULL;
+    }
 };
 
 struct Stack {
-    Node* top;
+public:
+    Node *top;
+
+public:
+    Stack() {
+        top = NULL;
+    }
+
+    bool isEmpty() {
+        return (top == NULL);
+    }
+
+    void push(int value) {
+        Node *newNode = new Node(value);
+        newNode->next = top;
+        top = newNode;
+    }
+
+    void pop() {
+        if (isEmpty()) {
+            cout << "Stack rong." << endl;
+            return;
+        }
+        Node *temp = top;
+        top = top->next;
+        delete temp;
+    }
+
+    void printStack() {
+        if (isEmpty()) {
+            cout << "Stack rong." << endl;
+            return;
+        }
+        cout << "Cac gia tri co trong stack la: ";
+        Node *current = top;
+        while (current != NULL) {
+            cout << current->data << " ";
+            current = current->next;
+        }
+        cout << endl;
+    }
 };
-
-void initStack(Stack &s) {
-    s.top = NULL;
-}
-
-bool isEmpty(Stack s) {
-    return s.top == NULL;
-}
-
-void push(Stack &s, int value) {
-    Node* newNode = new Node();
-    newNode->data = value;
-    newNode->next = s.top;
-    s.top = newNode;
-}
-
-int pop(Stack &s) {
-    if (isEmpty(s)) {
-        return -1; // Trả về -1 để biểu thị stack rỗng
-    }
-    Node* temp = s.top;
-    int poppedValue = temp->data;
-    s.top = s.top->next;
-    delete temp;
-    return poppedValue;
-}
-
-void printStack(Stack s) {
-    if (isEmpty(s)) {
-        cout << "Stack rong." << endl;
-        return;
-    }
-    cout << "Cac gia tri co trong stack la: ";
-    Node* current = s.top;
-    while (current != NULL) {
-        cout << current->data << " ";
-        current = current->next;
-    }
-    cout << endl;
-}
 
 int main() {
     Stack s;
-    initStack(s);
     int x;
     cin >> x;
-    int n;
-    bool check = true;
+
     while (true) {
-        cin >> n;
-        if (n == 0) {
-            break;
-        } else if (n == x) {
-            if (!isEmpty(s)) {
-                pop(s);
-            } else if (check) {
-                cout << "Stack rong." << endl;
-                check = false;
-            }
+        int a;
+        cin >> a;
+        if (a == 0) break;
+        if (a == x) {
+            s.pop();
         } else {
-            push(s, n);
+            s.push(a);
         }
     }
 
-    if (isEmpty(s)) {
+    s.printStack();
+    for (Node* temp = s.top; temp != NULL && temp->next != NULL; ) {
+    if (temp->next->data == 4) {
+        Node* p = temp->next;
+        temp->next = temp->next->next;
+        delete p;
+    } else {
+        temp = temp->next;  // Move to the next node only if no deletion happens
+    }
+}
+    if(s.isEmpty()){
         cout << "Stack rong." << endl;
     } else {
-        printStack(s);
+        s.printStack();
     }
-
     return 0;
 }

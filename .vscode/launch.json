@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(lldb) Launch",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}", // Đường dẫn chính xác tới file thực thi
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopOnEntry": false,
+            "externalConsole": true // hoặc false, tùy vào nhu cầu của bạn
+        }
+    ]
+}

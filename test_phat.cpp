@@ -1,105 +1,39 @@
-#include <iostream>
+#include<iostream>
+
 using namespace std;
 
-struct Node {
-    int data;
-    Node* next;
-    Node* prev;
-};
+void swap(int& a, int& b){
+    int temp;
+    temp = a;
+    a = b; 
+    b = temp;
+}
 
-struct DoubleLinkedList {
-    Node* head;
-    Node* tail;
-    int length;
-
-    DoubleLinkedList() {
-        head = nullptr;
-        tail = nullptr;
-        length = 0;
+void selectionsort(int a[], int n){
+    for(int i = 0; i < n; i++){
+        for(int j = i + 1; j < n; j++){
+            if(a[i] > a[j]){
+                swap(a[i], a[j]);
+            }
+        }
     }
+}
 
-    void insertAtHead(int x) {
-        Node* newNode = new Node();
-        newNode->data = x;
-        newNode->next = head;
-        newNode->prev = nullptr;
-        if (head != nullptr) {
-            head->prev = newNode;
-        }
-        head = newNode;
-        if (tail == nullptr) {
-            tail = newNode;
-        }
-        length++;
+void print(int a[], int n){
+    for(int i = 0; i < n; i++){
+        cout << a[i] << " ";
     }
+    cout << endl;
+}
 
-    void insertAtTail(int x) {
-        Node* newNode = new Node();
-        newNode->data = x;
-        newNode->next = nullptr;
-        newNode->prev = tail;
-        if (tail != nullptr) {
-            tail->next = newNode;
-        }
-        tail = newNode;
-        if (head == nullptr) {
-            head = newNode;
-        }
-        length++;
+int main(){
+    int a[100];
+    int n;
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        cin >> a[i];
     }
-
-    void deleteNode(Node* node) {
-        if (node == nullptr) return;
-        if (node->prev != nullptr) {
-            node->prev->next = node->next;
-        } else {
-            head = node->next;
-        }
-        if (node->next != nullptr) {
-            node->next->prev = node->prev;
-        } else {
-            tail = node->prev;
-        }
-        delete node;
-        length--;
-    }
-
-    void displayForward() {
-        Node* temp = head;
-        while (temp != nullptr) {
-            cout << temp->data << " ";
-            temp = temp->next;
-        }
-        cout << endl;
-    }
-
-    void displayBackward() {
-        Node* temp = tail;
-        while (temp != nullptr) {
-            cout << temp->data << " ";
-            temp = temp->prev;
-        }
-        cout << endl;
-    }
-};
-
-int main() {
-    DoubleLinkedList list;
-    list.insertAtHead(1);
-    list.insertAtHead(2);
-    list.insertAtTail(3);
-    list.insertAtTail(4);
-
-    cout << "List displayed forward: ";
-    list.displayForward();
-
-    cout << "List displayed backward: ";
-    list.displayBackward();
-
-    list.deleteNode(list.head->next); // Delete the second node
-
-    cout << "List after deletion: ";
-    list.displayForward();
-
-    return 0;
+    print(a, n);
+    selectionsort(a, n);
+    print(a, n);
 }

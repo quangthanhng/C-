@@ -1,55 +1,75 @@
 #include <iostream>
 using namespace std;
 
-struct Node {
-    int numerator;
-    int denominator;
-    Node* next;
+struct Node
+{
+    long numerator;
+    long denominator;
+    Node *next;
+    Node(long n, long d)
+    {
+        numerator = n;
+        denominator = d;
+        next = nullptr;
+    }
 };
 
-class LinkedList {
+struct LinkedList
+{
 public:
-    LinkedList() : head(nullptr) {}
+    LinkedList()
+    {
+        head = nullptr;
+        tail = nullptr;
+    }
 
-    void insert(int numerator, int denominator) {
-        if (denominator == 0) return;
-        Node* newNode = new Node();
-        newNode->next = nullptr;
-        if (!head) {
+    void insert(long numerator, long denominator)
+    {
+        Node *newNode = new Node(numerator, denominator);
+        if (!head)
+        {
             head = newNode;
-        } else {
-            Node* temp = head;
-            while (temp->next) {
-                temp = temp->next;
-            }
-            temp->next = newNode;
+            tail = newNode;
+        }
+        else
+        {
+            tail->next = newNode;
+            tail = newNode;
         }
     }
 
-    void printList() {
-        if (!head) {
+    void printList()
+    {
+        if (!head)
+        {
             cout << "Danh sach rong." << endl;
             return;
         }
         cout << "Danh sach vua nhap la: ";
-        Node* temp = head;
-        while (temp) {
+        Node *temp = head;
+        while (temp)
+        {
             cout << temp->numerator << "/" << temp->denominator << " ";
             temp = temp->next;
         }
         cout << endl;
     }
 
-    void printEqualRationals(int xNumerator, int xDenominator) {
-        if (!head) {
+    void printEqualRationals(long xNumerator, long xDenominator)
+    {
+        if (!xDenominator)
+        {
             cout << "Khong co phan so nao bang " << xNumerator << "/" << xDenominator << " trong danh sach." << endl;
             return;
         }
         bool found = false;
-        Node* temp = head;
-        while (temp) {
-            if (temp->numerator * xDenominator == temp->denominator * xNumerator) {
-                if (!found) {
+        Node *temp = head;
+        while (temp)
+        {
+            if (temp->numerator * xDenominator == temp->denominator * xNumerator)
+            {
+                if (!found)
+                {
                     cout << "Cac phan so bang " << xNumerator << "/" << xDenominator << " co trong danh sach la: ";
                     found = true;
                 }
@@ -57,29 +77,36 @@ public:
             }
             temp = temp->next;
         }
-        if (!found) {
+        if (!found)
+        {
             cout << "Khong co phan so nao bang " << xNumerator << "/" << xDenominator << " trong danh sach." << endl;
-        } else {
+        }
+        else
+        {
             cout << endl;
         }
     }
 
-private:
-    Node* head;
+    Node *head;
+    Node *tail;
 };
 
-int main() {
+int main()
+{
     LinkedList list;
-    int numerator, denominator;
+    long numerator, denominator;
 
-    while (true) {
+    while (true)
+    {
         cin >> numerator >> denominator;
-        if (denominator == 0) break;
+        if (denominator == 0)
+            break;
         list.insert(numerator, denominator);
     }
 
     list.printList();
-
+    if (!list.head)
+        return 0;
     cin >> numerator >> denominator;
     list.printEqualRationals(numerator, denominator);
 

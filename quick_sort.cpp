@@ -1,59 +1,69 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
-// Hàm hoán đổi hai phần tử
-void swap(int& a, int& b) {
-    int temp = a;
-    a = b;
-    b = temp;
+#define MAX 100
+
+int a[MAX];
+int n;
+
+void swap(int &m, int &n)
+{
+    int temp = m;
+    m = n;
+    n = temp;
 }
 
-// Hàm phân đoạn (partition) mảng
-int partition(vector<int>& arr, int low, int high) {
-    int pivot = arr[high]; // Chọn phần tử chốt (pivot)
-    int i = low - 1; // Chỉ số của phần tử nhỏ hơn
+void print()
+{
+    for (int i = 0; i < n; i++)
+    {
+        cout << a[i] << " ";
+    }
+}
 
-    for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
-            i++;
-            swap(arr[i], arr[j]);
+int partition(int start, int end)
+{
+    int pivot_value = a[end];
+    int i_small = start - 1;
+    for (int i = start; i < end; i++)
+    {
+        if (a[i] < pivot_value)
+        {
+            swap(a[i], a[++i_small]);
         }
     }
-    swap(arr[i + 1], arr[high]);
-    return i + 1;
+    swap(a[end], a[i_small + 1]);
+    return i_small++;
 }
 
-// Hàm Quick Sort
-void quickSort(vector<int>& arr, int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-
-        // Đệ quy sắp xếp các phần tử trước và sau phần tử chốt
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+void quicksort(int start, int end)
+{
+    if (start >= end)
+    {
+        return;
     }
+
+    // a[pivot] = pivot_value
+    int pivot = partition(start, end);
+    // start -> pivot - 1
+    quicksort(start, pivot - 1);
+    quicksort(pivot + 1, end);
+    // pivot + 1 -> end
 }
 
-// Hàm in mảng
-void printArray(const vector<int>& arr) {
-    for (int i = 0; i < arr.size(); i++) {
-        cout << arr[i] << " ";
+void solution()
+{
+    quicksort(0, n - 1);
+    print();
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
     }
-    cout << endl;
-}
-
-int main() {
-    vector<int> arr = {10, 7, 8, 9, 1, 5};
-    int n = arr.size();
-    cout << "Mảng ban đầu: ";
-    printArray(arr);
-
-    quickSort(arr, 0, n - 1);
-
-    cout << "Mảng sau khi sắp xếp: ";
-    printArray(arr);
-
-    return 0;
+    solution();
 }

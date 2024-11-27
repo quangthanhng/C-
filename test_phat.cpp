@@ -1,144 +1,242 @@
-#include<iostream>
+#include <iostream>
+#include <queue>
+#include <cmath>
+#include <cstdlib>
 using namespace std;
-void quicksort(int a[], int l, int r) {
-    if (l >= r) {
+
+struct node {
+    int key;
+    node* pleft;
+    node* pright;
+};
+
+// Hàm tạo một node mới
+node* createnode(int data) {
+    node* p = new node();
+    if (p == NULL) exit(1);
+    p->key = data;
+    p->pleft = NULL;
+    p->pright = NULL;
+    return p;
+}
+
+// Hàm chèn một node vào cây theo thứ tự duyệt theo mức
+node* insertnode(node* root, int data) {
+    if (root == NULL) {
+        root = createnode(data);
+        return root;
+    }
+    queue<node*> q;
+    q.push(root);
+    while (!q.empty()) {
+        node* tmp = q.front();
+        q.pop();
+        if (tmp->pleft != NULL) {
+            q.push(tmp->pleft);
+        }
+        else {
+            tmp->pleft = createnode(data);
+            return root;
+        }
+        if (tmp->pright != NULL) {
+            q.push(tmp->pright);
+        }
+        else {
+            tmp->pright = createnode(data);
+            return root;
+        }
+    }
+    return root;
+}
+
+// Hàm kiểm tra nếu cây là cây đầy đủ
+bool isfulltree(node* root) {
+    if (root == NULL) return true;
+    if (root->pleft == NULL && root->pright == NULL) return true;
+    if (root->pleft && root->pright) {
+        return (isfulltree(root->pleft) && isfulltree(root->pright));
+    }
+    return false;
+}
+
+// Hàm tìm node sâu nhất trong cây
+node* deepestnode(node* root) {
+    if (root == NULL) return NULL;
+    queue<node*> q;
+    q.push(root);
+    node* temp = nullptr;
+    while (!q.empty()) {
+        temp = q.front();
+        q.pop();
+        if (temp->pleft) q.push(temp->pleft);
+        if (temp->pright) q.push(temp->pright);
+    }
+    return temp;
+}
+
+// Hàm xóa node sâu nhất và phải nhất
+void deleteDeepestRightmostNode(node* root, node* d_node) {
+    if (root == NULL) return;
+    queue<node*> q;
+    q.push(root);
+
+    while (!q.empty()) {
+        node* temp = q.front();
+        q.pop();
+
+        if (temp->pleft) {
+            if (temp->pleft == d_node) {
+                temp->pleft = NULL;
+                delete d_node;
+                return;
+            } else {
+                q.push(temp->pleft);
+            }
+        }
+
+        if (temp->pright) {
+            if (temp->pright == d_node) {
+                temp->pright = NULL;
+                delete d_node;
+                return;
+            } else {
+                q.push(temp->pright);
+            }
+        }
+    }
+}
+
+// Hàm xóa một node có giá trị cụ thể trong cây
+node* deleteNode(node* root, int key) {
+    if (root == NULL) return NULL;
+
+    if (root->pleft == NULL && root->pright == NULL) {
+        if (root->key == key) {
+            delete root;
+            return NULL;
+        } else {
+            return root;
+        }
+    }
+
+    queue<node*> q;
+    q.push(root);
+    node* key_node = NULL;
+    node* temp;
+
+    while (!q.empty()) {
+        temp = q.front();
+        q.pop();
+
+        if (temp->key == key) key_node = temp;
+
+        if (temp->pleft) q.push(temp->pleft);
+        if (temp->pright) q.push(temp->pright);
+    }
+
+    if (key_node) {
+        node* deepest_node = deepestnode(root);
+        key_node->key = deepest_node->key;
+        deleteDeepestRightmostNode(root, deepest_node);
+    }
+
+    return root;
+}
+
+// Hàm chèn ngẫu nhiên một node vào cây tới độ sâu tối đa maxLevel
+void insertRandom(node*& root, int maxLevel) {
+    int value = rand() % 100;
+    if (root == nullptr) {
+        root = createnode(value);
         return;
     }
-    int pivot = a[(l + r) / 2];
-    int i = l;
-    int j = r;
-    while (i <= j) {
-        while (a[i] < pivot) {
-            i++;
-        }
-        while (a[j] > pivot) {
-            j--;
-        }
-        if (i <= j) {
-            int temp = a[i];
-            a[i] = a[j];
-            a[j] = temp;
-            i++;
-            j--;
+
+    queue<pair<node*, int>> q;
+    q.push({root, 1});
+
+    while (!q.empty()) {
+        node* curr = q.front().first;
+        int level = q.front().second;
+        q.pop();
+
+        if (level < maxLevel) {
+            if (curr->pleft == nullptr && rand() % 2) {
+                curr->pleft = createnode(rand() % 100);
+                return;
+            } else if (curr->pleft) {
+                q.push({curr->pleft, level + 1});
+            }
+
+            if (curr->pright == nullptr && rand() % 2) {
+                curr->pright = createnode(rand() % 100);
+                return;
+            } else if (curr->pright) {
+                q.push({curr->pright, level + 1});
+            }
         }
     }
-    quicksort(a, l, j);
-    quicksort(a, i, r);
 }
 
-void insertionsort(int a[], int n) {
-    for (int i = 1; i < n; i++) {
-        int key = a[i];
-        int j = i - 1;
-        while (j >= 0 && a[j] > key) {
-            a[j + 1] = a[j];
-            j--;
-        }
-        a[j + 1] = key;
+// Hàm in cây với cấu trúc đầy đủ, các node trống hiển thị dưới dạng "[]"
+void printTree(node* root, int maxLevel) {
+    if (root == nullptr) {
+        cout << "Tree is empty!" << endl;
+        return;
     }
-}
-void selectionsort(int a[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        int minIdx = i;
-        for (int j = i + 1; j < n; j++) {
-            if (a[j] < a[minIdx]) {
-                minIdx = j;
-            }
-        }
-        if (minIdx != i) {
-            int temp = a[i];
-            a[i] = a[minIdx];
-            a[minIdx] = temp;
-        }
-    }
-}
-void bubblesort(int a[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = n - 1; j > i; j--) {
-            if (a[j] < a[j - 1]) {
-                int temp = a[j];
-                a[j] = a[j - 1];
-                a[j - 1] = temp;
-            }
-        }
-    }
-}
-void shellsort(int a[], int n) {
-    for (int gap = n / 2; gap > 0; gap /= 2) {
-        for (int i = gap; i < n; i++) {
-            int temp = a[i];
-            int j;
-            for (j = i; j >= gap && a[j - gap] > temp; j -= gap) {
-                a[j] = a[j - gap];
-            }
-            a[j] = temp;
-        }
-    }
-}
-void sliding_window(int a[], int n, int k) {
-    for (int i = 0; i < n - k + 1; i++) {
-        int max = a[i];
-        for (int j = 1; j < k; j++) {
-            if (a[i + j] > max) {
-                max = a[i + j];
-            }
-        }
-        std::cout << max << " ";
-    }
-    std::cout << std::endl;
-}
 
-void heapsort(int a[], int n) {
-    for (int i = n / 2 - 1; i >= 0; i--) {
-        int j = i;
-        int temp = a[j];
-        int child = 2 * j + 1;
-        while (child < n) {
-            if (child + 1 < n && a[child] < a[child + 1]) {
-                child++;
-            }
-            if (temp < a[child]) {
-                a[j] = a[child];
-                j = child;
-                child = 2 * j + 1;
+    queue<node*> q;
+    q.push(root);
+    int currentLevel = 1;
+
+    while (!q.empty() && currentLevel <= maxLevel) {
+        int levelNodes = pow(2, currentLevel - 1);
+        int count = 0;
+
+        cout << string((pow(2, maxLevel - currentLevel) - 1) * 3, ' ');
+
+        for (int i = 0; i < levelNodes; i++) {
+            node* curr = q.empty() ? nullptr : q.front();
+            if (!q.empty()) q.pop();
+
+            if (curr) {
+                cout << curr->key;
+                q.push(curr->pleft);
+                q.push(curr->pright);
             } else {
-                break;
+                cout << " []";
+                q.push(nullptr);
+                q.push(nullptr);
+            }
+
+            count++;
+            if (count < levelNodes) {
+                cout << string((pow(2, maxLevel - currentLevel + 1) - 1) * 3, ' ');
             }
         }
-        a[j] = temp;
-    }
-    for (int i = n - 1; i > 0; i--) {
-        int temp = a[0];
-        a[0] = a[i];
-        a[i] = temp;
-        int j = 0;
-        temp = a[j];
-        int child = 2 * j + 1;
-        while (child < i) {
-            if (child + 1 < i && a[child] < a[child + 1]) {
-                child++;
-            }
-            if (temp < a[child]) {
-                a[j] = a[child];
-                j = child;
-                child = 2 * j + 1;
-            } else {
-                break;
-            }
-        }
-        a[j] = temp;
+
+        cout << endl;
+        currentLevel++;
     }
 }
 
 int main() {
-    int n;
-    cin >> n;
-    int a[n];
-    for (int i = 0; i < n; i++) {
-        cin >> a[i];
+    srand(time(0));
+    node* root = nullptr;
+
+    int maxLevel;
+    cout << "Enter the maximum depth of the tree: ";
+    cin >> maxLevel;
+
+    for (int i = 0; i < 10; i++) {
+        insertRandom(root, maxLevel);
     }
-    quicksort(a, 0, n - 1);
-    for (int i = 0; i < n; i++) {
-        cout << a[i] << " ";
-    }
+
+    cout << "Tree representation with missing nodes as [ ]:" << endl;
+    printTree(root, maxLevel);
+    cout<<"Insert node with key: ";
+    int x; cin>>x;
+    root=insertnode(root,x);
+    printTree(root, maxLevel);
+
+    return 0;
 }

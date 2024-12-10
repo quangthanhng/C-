@@ -13,30 +13,44 @@ void print(){
 }
 
 void combine(int start, int mid, int end){
-    //Xác định độ dài của 2 mảng con tách riêng ra để làm việc
-    //start -> mid | mid - start + 1 (phần tử)
-    int n1 = mid - start + 1;
-    // mid + 1 -> end
-    int n2 = end - mid;
-    int L[max];
-    for(int i = 0; i < n1; i++) L[i] = a[start + i];
-    int R[max];
-    for(int i = 0; i < n1; i++) R[i] = a[mid + 1 + i];
-    // Trộn
-    int j = 0, k = 0; // => L[j] và R[k]
-    int i = start;
-    for( ;j < n1 && k < n2; i++){
-        if(L[j] <= R[k]){
-            a[i] = L[j];
+    int n1 = mid - start + 1; // Kích thước mảng con bên trái
+    int n2 = end - mid;       // Kích thước mảng con bên phải
+
+    // Tạo mảng tạm
+    int L[n1], R[n2];
+
+    // Sao chép dữ liệu vào mảng tạm
+    for (int i = 0; i < n1; i++)
+        L[i] = a[start + i];
+    for (int i = 0; i < n2; i++)
+        R[i] = a[mid + 1 + i];
+
+    // Gộp hai mảng con trở lại mảng chính
+    int i = 0, j = 0, k = start;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            a[k] = L[i];
+            i++;
+        } else {
+            a[k] = R[j];
             j++;
-        }else {
-            a[i] = R[k];
-            k++;
         }
+        k++;
     }
-    // Check xem mảng con nào còn dư thì đưa nốt vào
-    for( ;j < n1; j++) a[i++] = L[j];
-    for( ;k < n2; k++) a[i++] = R[k];
+
+    // Sao chép các phần tử còn lại của L[], nếu có
+    while (i < n1) {
+        a[k] = L[i];
+        i++;
+        k++;
+    }
+
+    // Sao chép các phần tử còn lại của R[], nếu có
+    while (j < n2) {
+        a[k] = R[j];
+        j++;
+        k++;
+    }
 }
 
 void mergesort(int start, int end){

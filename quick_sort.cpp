@@ -1,69 +1,58 @@
 #include <iostream>
-
+# define max 100
 using namespace std;
 
-#define MAX 100
+// Hàm phân hoạch (Partition)
+int partition(int arr[], int start, int end) {
+    int pivot = arr[end]; // Chọn phần tử chốt (pivot) là phần tử cuối
+    int i = start - 1;    // Chỉ số của phần tử nhỏ hơn pivot
 
-int a[MAX];
-int n;
-
-void swap(int &m, int &n)
-{
-    int temp = m;
-    m = n;
-    n = temp;
-}
-
-void print()
-{
-    for (int i = 0; i < n; i++)
-    {
-        cout << a[i] << " ";
-    }
-}
-
-int partition(int start, int end)
-{
-    int pivot_value = a[end];
-    int i_small = start - 1;
-    for (int i = start; i < end; i++)
-    {
-        if (a[i] < pivot_value)
-        {
-            swap(a[i], a[++i_small]);
+    for (int j = start; j < end; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            // Hoán đổi arr[i] và arr[j]
+            swap(arr[i], arr[j]);
         }
     }
-    swap(a[end], a[i_small + 1]);
-    return i_small++;
+    // Đưa pivot vào đúng vị trí
+    swap(arr[i + 1], arr[end]);
+    return i + 1; // Trả về chỉ số của pivot
 }
 
-void quicksort(int start, int end)
-{
-    if (start >= end)
-    {
-        return;
+// Hàm Quick Sort
+void quickSort(int arr[], int start, int end) {
+    if (start < end) {
+        int pi = partition(arr, start, end); // Chỉ số phân hoạch
+
+        // Đệ quy sắp xếp hai nửa
+        quickSort(arr, start, pi - 1); // Nửa bên trái
+        quickSort(arr, pi + 1, end);  // Nửa bên phải
     }
-
-    // a[pivot] = pivot_value
-    int pivot = partition(start, end);
-    // start -> pivot - 1
-    quicksort(start, pivot - 1);
-    quicksort(pivot + 1, end);
-    // pivot + 1 -> end
 }
 
-void solution()
-{
-    quicksort(0, n - 1);
-    print();
+// Hàm in mảng
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
 }
 
-int main()
-{
+// Hàm chính
+int main() {
+    int arr[max];
+    int n;
     cin >> n;
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
     }
-    solution();
+    cout << "Mảng ban đầu: ";
+    printArray(arr, n);
+
+    quickSort(arr, 0, n - 1);
+
+    cout << "Mảng sau khi sắp xếp: ";
+    printArray(arr, n);
+
+    return 0;
 }

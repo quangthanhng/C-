@@ -1,15 +1,26 @@
 {
-    "version": "0.2.0",
-    "configurations": [
+    "version": "2.0.0",
+    "tasks": [
         {
-            "name": "(lldb) Launch",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}/${fileBasenameNoExtension}", // Đường dẫn chính xác tới file thực thi
-            "args": [],
-            "cwd": "${workspaceFolder}",
-            "stopOnEntry": false,
-            "externalConsole": true // hoặc false, tùy vào nhu cầu của bạn
+            "label": "clang++ build active file",
+            "type": "shell",
+            "command": "clang++",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

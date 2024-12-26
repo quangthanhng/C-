@@ -196,6 +196,7 @@ int main()
     int phantu;
     cin >> phantu;
     list.deleteAt(phantu);
+    list.insertAt(3, 6);
     list.iteration();
     return 0;
 }

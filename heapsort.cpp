@@ -9,43 +9,38 @@ void swap(int &a, int &b) {
     b = temp;
 }
 
-// Hàm để điều chỉnh heap (heapify)
-void heapify(int arr[], int n, int i) {
-    int largest = i;         // Giả sử gốc là lớn nhất
-    int left = 2 * i + 1;    // Chỉ số con trái
-    int right = 2 * i + 2;   // Chỉ số con phải
-
-    // Nếu con trái lớn hơn gốc
-    if (left < n && arr[left] > arr[largest])
+void heapify(int a[], int n, int i){
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    //Nếu node con trái lớn hơn node cha hiện tại 
+    if(left < n && a[left] > a[largest]){
         largest = left;
-
-    // Nếu con phải lớn hơn "lớn nhất" hiện tại
-    if (right < n && arr[right] > arr[largest])
+    }
+    //Nếu node con phải lớn hơn node cha hiện tại 
+    if(right < n && a[right] > a[largest]){
         largest = right;
-
-    // Nếu "lớn nhất" không phải là gốc
-    if (largest != i) {
-        swap(arr[i], arr[largest]);
-
-        // Đệ quy điều chỉnh lại heap
-        heapify(arr, n, largest);
+    }
+    // Nếu node lớn nhất không phải là node hiện tại
+    if(largest != i){
+        swap(a[i], a[largest]);
+        heapify(a, n, largest);
     }
 }
 
-// Hàm thực hiện Heap Sort
-void heapSort(int arr[], int n) {
-    // Xây dựng heap (tổ chức lại mảng thành Max-Heap)
-    for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
-
-    // Trích xuất từng phần tử từ heap
-    for (int i = n - 1; i > 0; i--) {
-        // Di chuyển phần tử gốc (lớn nhất) đến cuối mảng
-        swap(arr[0], arr[i]);
-
-        // Gọi heapify trên heap rút gọn
-        heapify(arr, i, 0);
+// Hàm để điều chỉnh heap (heapify)
+void heapSort(int a[], int n){
+    // Xây dựng một heap max 
+    for(int i = n/2 - 1; i >= 0; i--)
+        heapify(a, n, i);
+    // Trích xuất từ phần tử lớn nhất max heap và sắp xếp
+    for(int i = n - 1; i > 0; i--){
+        //Đưa phần tử lớn nhất về cuối mảng
+        swap(a[0], a[i]);
+        //Gọi heapify để tạo heap max cho phần còn lại
+        heapify(a, i, 0);
     }
+
 }
 
 // Hàm in mảng

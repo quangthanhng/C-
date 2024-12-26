@@ -1,34 +1,26 @@
-#include <iostream>
-
+#include<iostream>
 using namespace std;
+#define max 100
 
-#define MAX 100
-
-void swap(int &m, int &n)
-{
-    int temp = m;
-    m = n;
-    n = temp;
-}
-
-void print(int a[], int n)
-{
-    for (int i = 0; i < n; i++)
-    {
+void print(int a[], int n){
+    for(int i = 0; i < n; i++){
         cout << a[i] << " ";
     }
+    cout << endl;
+}
+ 
+void swap(int& a, int& b){
+    int temp = a;
+    a = b;
+    b = temp;
 }
 
-void solution(int a[], int n)
-{
+void solution(int a[], int n){
     bool check = true;
-    while (check == true)
-    {
+    for( ;check == true; ){
         check = false;
-        for (int i = 0; i <= n - 2; i++)
-        {
-            if (a[i] > a[i + 1])
-            {
+        for(int i = 0; i <= n - 2; i++){
+            if(a[i] > a[i + 1]){
                 swap(a[i], a[i + 1]);
                 check = true;
             }
@@ -37,13 +29,11 @@ void solution(int a[], int n)
     print(a, n);
 }
 
-int main()
-{
-    int a[MAX];
+int main(){
+    int a[max];
     int n;
     cin >> n;
-    for (int i = 0; i < n; i++)
-    {
+    for(int i = 0; i < n; i++){
         cin >> a[i];
     }
     solution(a, n);

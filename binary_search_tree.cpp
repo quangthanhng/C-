@@ -46,7 +46,7 @@ struct Tree
 
     void print()
     {
-        traverse_preorder(root);
+        traverse_inorder(root);
         std::cout << endl;
     }
 
@@ -154,17 +154,21 @@ struct Tree
 
 int main()
 {
-    Tree tree(1);
-    tree.insert(5);
-    tree.insert(4);
-    tree.insert(2);
-    tree.insert(3);
-    // tree.insert(8);
-    // tree.insert(7);
-    tree.insert(6);
-    tree.remove(3);
-    tree.remove(5);
-    tree.print();
-    std::cout << (tree.search(3) ? "Found 3" : "Not found 3") << endl;
-    std::cout << (tree.search(7) ? "Found 7" : "Not found 7") << endl;
+    int n;
+    cin >> n;
+    Tree tree(n);
+    while(true){
+        cin >> n;
+        if(n == 0){
+            break;
+        }
+        tree.insert(n);
+    }
+    if(tree.root == NULL){
+        cout << "Danh sach rong. " << endl;
+        return 0;
+    }
+    else {
+        tree.print();
+    }
 }

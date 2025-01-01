@@ -1,5 +1,4 @@
-inDanhSachGiamDan(TREE);
-            // cout << endl;
-            // demSoChuoiDoiXung(TREE, cnt);
-            // cout << "Co " << cnt << " node thoa de bai." << endl;
-            // break;
+ // double sqrtM = sqrt(m);
+    // int closest = findClosest(a, n, sqrtM);
+
+    // cout << closest << endl;

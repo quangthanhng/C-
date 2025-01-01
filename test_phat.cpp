@@ -1,43 +1,33 @@
 #include<iostream>
+#include<string>
+
 using namespace std;
 
-struct Stack{
-    int *arr;
-    int length;
-
-    Stack(){
-        arr = NULL;
-        length = 0;
-    }
-    ~Stack(){
-        delete [] arr;
-    }
-    int& operator[](int index){
-        return arr[index];
-    }
-
-    void push(int value){
-        if(arr == NULL){
-            arr = new int[1];
-            arr[0] = value;
-            length++;
-            return;
+void selection_sort(int a[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;  // Giả sử phần tử nhỏ nhất là phần tử ở vị trí i
+        for (int j = i + 1; j < n; j++) {
+            if (a[j] < a[minIdx]) {
+                minIdx = j;  // Tìm vị trí phần tử nhỏ nhất
+            }
         }
-        int* temp_arr = new int[length + 1];
-        for(int i  = 0; i < length; i++){
-            temp_arr[i] = arr[i];
+        // Hoán đổi phần tử nhỏ nhất với phần tử đầu tiên chưa sắp xếp
+        if (minIdx != i) {
+            swap(a[i], a[minIdx]);
         }
-        temp_arr[length++] = value;
-        delete [] arr;
-        arr = temp_arr;
     }
-    int pop(){
+}
 
+
+int main() {
+    int n;
+    int a[100];
+    cin >> n;
+    for(int i = 0; i < n; i++){
+        cin >> a[i];
     }
-};
-
-int main(){
-    Stack s;
-    s.push(10);
-    s.push(15);
+    selection_sort(a, n);
+    for(int i = 0; i < n; i++){
+        cout << a[i] << " ";
+    }
 }

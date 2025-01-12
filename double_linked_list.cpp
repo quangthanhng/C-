@@ -39,7 +39,7 @@ struct DoubleLinkedList
     }
     void insert_atTail(int value)
     {
-        Node *newNode = new Node(value);
+        Node *newNode = new Node();
         newNode->data = value;
         newNode->prev = pTail;
         newNode->next = nullptr;

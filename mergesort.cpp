@@ -87,3 +87,113 @@ int main()
     }
     solution(a, n);
 }
+
+/////////////////////////////////////Linked list/////////////////////////
+#include <iostream>
+using namespace std;
+
+// Định nghĩa nút của Linked List
+struct Node {
+    int data;
+    Node* next;
+    Node(int value) : data(value), next(nullptr) {}
+};
+
+// Hàm thêm một nút vào cuối danh sách
+void append(Node*& head, int data) {
+    Node* newNode = new Node(data);
+    if (!head) {
+        head = newNode;
+        return;
+    }
+    Node* temp = head;
+    while (temp->next) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+// Hàm in danh sách liên kết
+void printList(Node* head) {
+    Node* temp = head;
+    while (temp) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+// Hàm chia danh sách liên kết thành 2 nửa
+Node* mergeSort(Node* head) {
+    // Trường hợp cơ bản: nếu danh sách có 0 hoặc 1 phần tử, đã sắp xếp
+    if (!head || !head->next) {
+        return head;
+    }
+
+    // Chia đôi danh sách
+    Node* mid = getMiddle(head);
+    Node* left = head;
+    Node* right = mid->next;
+    mid->next = nullptr; // Tách 2 nửa
+
+    // Sắp xếp 2 nửa
+    left = mergeSort(left);
+    right = mergeSort(right);
+
+    // Kết hợp 2 nửa đã sắp xếp
+    return merge(left, right);
+}
+
+// Hàm tìm phần tử giữa của danh sách liên kết
+Node* getMiddle(Node* head) {
+    if (!head) return head;
+
+    Node* slow = head;
+    Node* fast = head;
+    
+    // Di chuyển fast 2 bước và slow 1 bước
+    while (fast->next && fast->next->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
+// Hàm kết hợp hai danh sách đã sắp xếp thành một danh sách duy nhất
+Node* merge(Node* left, Node* right) {
+    // Nếu một trong hai danh sách rỗng, trả về danh sách còn lại
+    if (!left) return right;
+    if (!right) return left;
+
+    // Chọn phần tử nhỏ hơn để nối vào danh sách kết quả
+    if (left->data <= right->data) {
+        left->next = merge(left->next, right);
+        return left;
+    } else {
+        right->next = merge(left, right->next);
+        return right;
+    }
+}
+
+int main() {
+    Node* head = nullptr;
+
+    // Thêm các phần tử vào danh sách
+    append(head, 64);
+    append(head, 34);
+    append(head, 25);
+    append(head, 12);
+    append(head, 22);
+    append(head, 11);
+
+    cout << "Danh sách trước khi sắp xếp: ";
+    printList(head);
+
+    // Sắp xếp danh sách bằng Merge Sort
+    head = mergeSort(head);
+
+    cout << "Danh sách sau khi sắp xếp: ";
+    printList(head);
+
+    return 0;
+}

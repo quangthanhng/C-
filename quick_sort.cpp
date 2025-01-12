@@ -43,13 +43,13 @@ void printArray(int arr[], int size)
 // Hàm chính
 int main()
 {
-    int arr[max];
-    int n;
-    cin >> n;
-    for (int i = 0; i < n; i++)
-    {
-        cin >> arr[i];
-    }
+    int arr[max] = { 4, 3, 1, 2, 5, 9, 7, 10, 8};
+    int n = 9;
+    // cin >> n;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cin >> arr[i];
+    // }
     cout << "Mảng ban đầu: ";
     printArray(arr, n);
 

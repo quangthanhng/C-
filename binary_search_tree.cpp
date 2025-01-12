@@ -48,6 +48,10 @@ struct Tree
     {
         traverse_inorder(root);
         std::cout << endl;
+        traverse_postorder(root);
+        std::cout << endl;
+        traverse_preorder(root);
+        std::cout << endl;
     }
 
     Node *_insert(Node *node, int value)
@@ -150,6 +154,30 @@ struct Tree
     {
         return _search(root, value);
     }
+    // Hàm tính chiều cao của cây
+    int getHeight(struct Node *node)
+    {
+        if (node == nullptr)
+            return 0;
+        return 1 + std::max(getHeight(node->left), getHeight(node->right));
+    }
+
+    // Hàm kiểm tra xem cây có phải là cây nhị phân hoàn hảo hay không
+    bool isPerfectTree(struct Node *root)
+    {
+        if (root == nullptr)
+            return true;
+
+        int leftHeight = getHeight(root->left);
+        int rightHeight = getHeight(root->right);
+
+        // Nếu chiều cao trái và phải không bằng nhau, cây không hoàn hảo
+        if (leftHeight != rightHeight)
+            return false;
+
+        // Kiểm tra đệ quy các con của node
+        return isPerfectTree(root->left) && isPerfectTree(root->right);
+    }
 };
 
 int main()
@@ -157,18 +185,24 @@ int main()
     int n;
     cin >> n;
     Tree tree(n);
-    while(true){
+    while (true)
+    {
         cin >> n;
-        if(n == 0){
+        if (n == 0)
+        {
             break;
         }
         tree.insert(n);
     }
-    if(tree.root == NULL){
+    if (tree.root == NULL)
+    {
         cout << "Danh sach rong. " << endl;
         return 0;
     }
-    else {
+    else
+    {
         tree.print();
+        cout << ((tree.isPerfectTree(tree.root)) ? "Perfect tree" : "Non-perfect tree"); 
     }
+
 }
